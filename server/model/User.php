@@ -8,7 +8,7 @@
  */
 class User
 {
-    private $userName, $password;
+    public $userName, $password;
 
     /**
      * User constructor.

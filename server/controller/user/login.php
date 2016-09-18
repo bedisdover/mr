@@ -1,4 +1,11 @@
 <?php
+
+include "../../dao/UserDao.php";
+include "../../data/UserData.php";
+include "../../model/User.php";
+include "../../model/Message.php";
+include "../../util/DbConn.php";
+
 /**
  * Created by PhpStorm.
  * User: song
@@ -7,12 +14,25 @@
  *
  * 登录
  */
+session_start();
 
 $userName = $_POST['userName'];
 $password = $_POST['password'];
 
-$userDao = UserDao::getInstance();
+// To protect MySQL injection
+$userName = stripslashes($userName);
+$password = stripslashes($password);
 
-$message = $userDao->logIn($userName, $password);
+if (isset($_SESSION["userName"])) {
+    echo json_encode(new Message(0, "用户已登录", null));
+} else {
+    $userDao = UserDao::getInstance();
 
-echo json_encode($message);
+    $message = $userDao->logIn($userName, $password);
+
+    echo json_encode($message);
+
+    if ($message->getState() === 1) {
+        $_SESSION["userName"] = $userName;
+    }
+}

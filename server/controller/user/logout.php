@@ -1,4 +1,7 @@
 <?php
+
+include "../../model/Message.php";
+
 /**
  * Created by PhpStorm.
  * User: song
@@ -7,3 +10,12 @@
  *
  * 登出
  */
+session_start();
+
+if (isset($_SESSION["userName"])) {
+    unset($_SESSION["userName"]);
+
+    echo json_encode(new Message(1, "登出成功", null));
+} else {
+    echo json_encode(new Message(0, "用户未登录", null));
+}

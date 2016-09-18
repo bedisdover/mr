@@ -10,13 +10,13 @@
  */
 class Message
 {
-    private $state, $info, $object;
+    public $state, $info, $object;
 
     /**
      * Message constructor.
      * @param $state
-     * 状态码，  0 ----- 成功；
-     *         1 ----- 失败
+     * 状态码，  1 ----- 成功；
+     *         0 ----- 失败
      * @param $info
      * 状态信息
      * @param $object
