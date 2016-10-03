@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+<script src="jquery-3.0.0.min.js"></script>
+<script>
+    $.ajax({
+        url: 'http://114.214.88.219:8082/controller/scenic/scenicInfo.php',
+        dataType: 'jsonp',
+        data: 'name=' + encodeURIComponent('仙人洞口'),
+        type: 'post',
+        success: function(data) {
+            var text = decodeURIComponent(data);
+            console.log(text);
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    })
+</script>
+</html>

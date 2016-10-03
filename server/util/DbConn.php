@@ -30,6 +30,7 @@ class DbConn
         if ($this->conn->connect_error) {
             return null;
         }
+
         return $this->conn;
     }
 }

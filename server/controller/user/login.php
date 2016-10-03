@@ -19,6 +19,10 @@ session_start();
 $userName = $_POST['userName'];
 $password = $_POST['password'];
 
+// To protect javaScript injection
+$userName = htmlspecialchars($userName);
+$password = htmlspecialchars($password);
+
 // To protect MySQL injection
 $userName = stripslashes($userName);
 $password = stripslashes($password);

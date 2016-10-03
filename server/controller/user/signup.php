@@ -17,6 +17,10 @@ include "../../util/DbConn.php";
 $userName = $_POST['userName'];
 $password = $_POST['password'];
 
+// To protect javaScript injection
+$userName = htmlspecialchars($userName);
+$password = htmlspecialchars($password);
+
 // To protect MySQL injection
 $username = stripslashes($userName);
 $password = stripslashes($password);

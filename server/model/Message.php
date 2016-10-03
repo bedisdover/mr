@@ -25,7 +25,7 @@ class Message
     public function __construct($state, $info, $object)
     {
         $this->state = $state;
-        $this->info = $info;
+        $this->info = urlencode($info);
         $this->object = $object;
     }
 
