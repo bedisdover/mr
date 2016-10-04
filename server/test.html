@@ -9,16 +9,23 @@
 </body>
 <script src="jquery-3.0.0.min.js"></script>
 <script>
+//    $.ajax({
+//        url: '/controller/scenic/scenicInfo.php',
+//        data: 'name=白鹿洞',
+//        type: 'get',
+//        success: function (data) {
+//            console.log(decodeURIComponent(data));
+//        }
+//    });
     $.ajax({
-        url: 'http://114.214.88.219:8082/controller/scenic/scenicInfo.php',
-        dataType: 'jsonp',
-        data: 'name=' + encodeURIComponent('仙人洞口'),
-        type: 'post',
-        success: function(data) {
+        url: '/controller/scenic/nearby.php',
+        data: 'longitude=116.037644&latitude=29.525714&direction=360',
+        type: 'get',
+        success: function (data) {
             var text = decodeURIComponent(data);
             console.log(text);
         },
-        error: function(data) {
+        error: function (data) {
             console.log(data);
         }
     })

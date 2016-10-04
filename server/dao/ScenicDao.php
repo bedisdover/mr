@@ -34,4 +34,16 @@ class ScenicDao
             return new Message(1, $scenicName, $scenicInfo);
         }
     }
+
+    public static function getNearby($longitude, $latitude, $direction)
+    {
+        $scenicData = new ScenicData();
+        $result = $scenicData->getNearby((double)$longitude, (double)$latitude, (double)$direction);
+
+        if ($result === null) {
+            return new Message(0, "", null);
+        } else {
+            return new Message(1, "", $result);
+        }
+    }
 }
