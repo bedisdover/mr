@@ -1,9 +1,10 @@
-package cn.edu.nju.mr.client;
+package cn.edu.nju.mr.client.controller;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import cn.edu.nju.mr.client.R;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 
