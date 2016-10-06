@@ -8,7 +8,7 @@ import android.location.LocationListener;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
+import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.edu.nju.mr.client.R;
@@ -31,7 +31,9 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
             e.printStackTrace();
         }
         this.directionAccessor = new DirectionAccessor(this);
+    }
 
+    public void initCamera() {
     }
 
     @Override
@@ -66,7 +68,7 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
+        /* do nothing */
     }
 
     //-------------------location services-------------------------
@@ -77,7 +79,7 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-
+        /* do nothing */
     }
 
     @Override
@@ -99,8 +101,10 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
 
     private void initComponents() {
         txtLocation = (TextView) findViewById(R.id.txtLocation);
+        surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
     }
     private LocationAccessor locationAccessor;
     private TextView txtLocation;
+    private SurfaceView surfaceView;
     private DirectionAccessor directionAccessor;
 }
