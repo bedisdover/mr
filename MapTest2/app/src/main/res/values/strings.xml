@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MapTest</string>
+    <string name="signore">标记</string>
+    <string name="detail">详情</string>
+    <string name="back">返回</string>
+</resources>
