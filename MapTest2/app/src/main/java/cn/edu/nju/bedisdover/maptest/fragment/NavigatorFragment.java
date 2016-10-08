@@ -28,6 +28,7 @@ import java.util.List;
 
 import cn.edu.nju.bedisdover.maptest.MainActivity;
 import cn.edu.nju.bedisdover.maptest.R;
+import cn.edu.nju.bedisdover.maptest.activity.SceneItem;
 import cn.edu.nju.bedisdover.maptest.model.CameraAccessor;
 import cn.edu.nju.bedisdover.maptest.model.DirectionAccessor;
 import cn.edu.nju.bedisdover.maptest.model.LocationAccessor;
@@ -158,8 +159,7 @@ public class NavigatorFragment extends Fragment implements LocationListener, Sen
     }
 
     public void addNewButton(Scenic scenic, double longitude, double latitude, int direction) {
-        Button b = new Button(getActivity());
-        b.setText(scenic.getName());
+        SceneItem b = new SceneItem(getActivity(), "123123", 1561);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
