@@ -1,5 +1,6 @@
 package cn.edu.nju.bedisdover.maptest.util;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.iflytek.cloud.SpeechConstant;
@@ -8,6 +9,7 @@ import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
 
 import cn.edu.nju.bedisdover.maptest.ScenicActivity;
+import cn.edu.nju.bedisdover.maptest.ScenicDemoActivity;
 
 /**
  * Created by song on 16-10-4.
@@ -18,7 +20,7 @@ public class SpeechUtil {
 
     private static SpeechSynthesizer mTts;
 
-    private static ScenicActivity activity;
+    private static Context context;
 
     private SpeechUtil() {
     }
@@ -28,10 +30,10 @@ public class SpeechUtil {
      *
      * @param content 需要朗读的内容
      */
-    public static void startSpeaking(ScenicActivity activity, String content) {
-        SpeechUtil.activity = activity;
+    public static void startSpeaking(Context context, String content) {
+        SpeechUtil.context = context;
         //1.创建SpeechSynthesizer对象, 第二个参数：本地合成时传InitListener
-        mTts = SpeechSynthesizer.createSynthesizer(activity, null);
+        mTts = SpeechSynthesizer.createSynthesizer(context, null);
         //2.合成参数设置
         mTts.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");//设置发音人
         mTts.setParameter(SpeechConstant.SPEED, "50");//设置语速
@@ -73,7 +75,15 @@ public class SpeechUtil {
     private static SynthesizerListener mSynListener = new SynthesizerListener() {
         //会话结束回调接口，没有错误时，error为null
         public void onCompleted(SpeechError error) {
-            activity.complete();
+            if (context instanceof ScenicActivity) {
+                ((ScenicActivity) context).complete();
+
+                return;
+            }
+
+            if (context instanceof ScenicDemoActivity) {
+                ((ScenicDemoActivity) context).complete();
+            }
         }
 
         //缓冲进度回调

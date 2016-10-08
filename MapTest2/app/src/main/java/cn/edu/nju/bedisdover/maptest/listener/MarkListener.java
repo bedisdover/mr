@@ -29,7 +29,7 @@ public class MarkListener implements OnMarkerClickListener {
 
         Intent intent = new Intent(view.getContext(), ScenicActivity.class);
 
-        if (name.equals("黄龙泉")) {
+        if (name.equals("黄龙潭")) {
             intent = new Intent(view.getContext(), ScenicDemoActivity.class);
         }
         intent.putExtra("name", name);

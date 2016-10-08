@@ -32,6 +32,10 @@ public class ScenicUtil {
      * 获取景点列表
      */
     public static List<Scenic> getScenicList(View view) {
+        if (scenicList.size() != 0) {
+            return scenicList;
+        }
+
         try {
             InputStream inputStream = view.getResources().getAssets().open("data.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -57,6 +61,9 @@ public class ScenicUtil {
         return scenicList;
     }
 
+    /**
+     * 根据名称获取景点对象
+     */
     public static Scenic getScenicByName(String name) {
         for (Scenic scenic : scenicList) {
             if (scenic.getName().equals(name)) {
@@ -65,9 +72,5 @@ public class ScenicUtil {
         }
 
         return null;
-    }
-
-    public static void setScenicList(List<Scenic> scenicList) {
-        ScenicUtil.scenicList = scenicList;
     }
 }

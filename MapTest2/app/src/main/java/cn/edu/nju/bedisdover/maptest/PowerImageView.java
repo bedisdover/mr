@@ -17,8 +17,9 @@ import java.lang.reflect.Field;
 
 /**
  * Created by song on 16-10-7.
+ * <p>
+ * 自定义ImageView对象，用于播放gif
  */
-
 public class PowerImageView extends ImageView implements View.OnClickListener {
     /**
      * 播放GIF动画的关键类
@@ -57,8 +58,6 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
 
     /**
      * PowerImageView构造函数。
-     *
-     * @param context
      */
     public PowerImageView(Context context) {
         super(context);
@@ -66,8 +65,6 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
 
     /**
      * PowerImageView构造函数。
-     *
-     * @param context
      */
     public PowerImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -75,31 +72,32 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
 
     /**
      * PowerImageView构造函数，在这里完成所有必要的初始化操作。
-     *
-     * @param context
      */
     public PowerImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PowerImageView);
-        int resourceId = getResourceId(a, context, attrs);
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PowerImageView);
+        int resourceId = getResourceId(typedArray, context, attrs);
         if (resourceId != 0) {
             // 当资源id不等于0时，就去获取该资源的流
             InputStream is = getResources().openRawResource(resourceId);
             // 使用Movie类对流进行解码
             mMovie = Movie.decodeStream(is);
             if (mMovie != null) {
+                this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                 // 如果返回值不等于null，就说明这是一个GIF图片，下面获取是否自动播放的属性
-                isAutoPlay = a.getBoolean(R.styleable.PowerImageView_auto_play, false);
+//                isAutoPlay = typedArray.getBoolean(R.styleable.PowerImageView_auto_play, false);
+
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
                 mImageWidth = bitmap.getWidth();
                 mImageHeight = bitmap.getHeight();
                 bitmap.recycle();
-                if (!isAutoPlay) {
-                    // 当不允许自动播放的时候，得到开始播放按钮的图片，并注册点击事件
-                    mStartButton = BitmapFactory.decodeResource(getResources(),
-                            android.R.drawable.ic_media_play);
-                    setOnClickListener(this);
-                }
+//                if (!isAutoPlay) {
+                // 当不允许自动播放的时候，得到开始播放按钮的图片，并注册点击事件
+                mStartButton = BitmapFactory.decodeResource(getResources(),
+                        android.R.drawable.ic_media_play);
+                setOnClickListener(this);
+//                }
             }
         }
     }
@@ -156,7 +154,6 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
     /**
      * 开始播放GIF动画，播放完成返回true，未完成返回false。
      *
-     * @param canvas
      * @return 播放完成返回true，未完成返回false。
      */
     private boolean playMovie(Canvas canvas) {
@@ -181,9 +178,6 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
     /**
      * 通过Java反射，获取到src指定图片资源所对应的id。
      *
-     * @param a
-     * @param context
-     * @param attrs
      * @return 返回布局文件中指定图片资源所对应的id，没有指定任何图片资源就返回0。
      */
     private int getResourceId(TypedArray a, Context context, AttributeSet attrs) {

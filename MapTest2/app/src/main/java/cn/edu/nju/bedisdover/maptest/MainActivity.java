@@ -1,5 +1,6 @@
 package cn.edu.nju.bedisdover.maptest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +21,11 @@ import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectListener;
 public class MainActivity extends AppCompatActivity {
 
     private List<Fragment> fragmentList;
+
+    /**
+     * 导航栏控制器
+     */
+    private Controller controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         //构建导航栏,得到Controller进行后续控制
-        Controller controller = pagerBottomTabLayout.builder()
+        controller = pagerBottomTabLayout.builder()
                 .addTabItem(tabItemBuilder)
                 .addTabItem(android.R.drawable.ic_menu_compass, "位置", color)
                 .addTabItem(android.R.drawable.ic_menu_search, "搜索", color)
@@ -67,9 +73,18 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    OnTabItemSelectListener listener = new OnTabItemSelectListener() {
+    private OnTabItemSelectListener listener = new OnTabItemSelectListener() {
         @Override
         public void onSelected(int index, Object tag) {
+            // 去掉景点名称信息
+            if (index == 1) {
+                Intent intent = getIntent();
+
+                if (intent.hasExtra("scenicName")) {
+                    intent.removeExtra("scenicName");
+                }
+            }
+
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.activity_main_content, fragmentList.get(index));
             transaction.commit();
@@ -79,4 +94,19 @@ public class MainActivity extends AppCompatActivity {
         public void onRepeatClick(int index, Object tag) {
         }
     };
+
+    /**
+     * 跳转到指定景点的地图位置
+     */
+    public void jumpToScenic(String scenicName) {
+        Intent intent = getIntent();
+        intent.putExtra("scenicName", scenicName);
+
+        // 切换导航栏
+        controller.setSelect(1);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.activity_main_content, fragmentList.get(1));
+        transaction.commit();
+    }
 }

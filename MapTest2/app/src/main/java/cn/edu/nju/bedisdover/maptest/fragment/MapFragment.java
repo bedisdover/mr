@@ -1,5 +1,8 @@
 package cn.edu.nju.bedisdover.maptest.fragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +28,11 @@ import cn.edu.nju.bedisdover.maptest.util.MarkerUtil;
  */
 public class MapFragment extends Fragment {
 
+    /**
+     * 特定的景点名称
+     */
+    private String scenicName;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +46,20 @@ public class MapFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        Intent intent = ((Activity) context).getIntent();
+        String name = intent.getStringExtra("scenicName");
+
+        if (name != null) {
+            scenicName = name;
+        } else {
+            scenicName = "";
+        }
+
+        super.onAttach(context);
+    }
+
     private void initMap(MapView mapView) {
         AMap map = mapView.getMap();
         UiSettings uiSettings = map.getUiSettings();
@@ -49,13 +71,17 @@ public class MapFragment extends Fragment {
                 0  ////偏航角 0~360° (正北方为0)
         )));
 
-        map.addMarkers(MarkerUtil.getMarkerList(mapView), false);
+        if (scenicName.equals("")) {
+            map.addMarkers(MarkerUtil.getMarkerList(mapView), false);
+        } else {
+            map.addMarker(MarkerUtil.getMarkerByName(mapView, scenicName));
+        }
 
         map.setOnMarkerClickListener(new MarkListener(mapView));
 
         uiSettings.setCompassEnabled(true);// 显示指南针
 //        map.setLocationSource(new LocationListener());// 设置定位监听
-        uiSettings.setMyLocationButtonEnabled(true); // 显示默认的定位按钮
+//        uiSettings.setMyLocationButtonEnabled(true); // 显示默认的定位按钮
         map.setMyLocationEnabled(true);// 可触发定位并显示定位层
         uiSettings.setScaleControlsEnabled(false);//显示比例尺控件
     }
