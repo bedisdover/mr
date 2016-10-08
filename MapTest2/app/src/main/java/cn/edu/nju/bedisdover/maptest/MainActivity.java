@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.nju.bedisdover.maptest.fragment.MapFragment;
+import cn.edu.nju.bedisdover.maptest.fragment.NavigatorFragment;
 import cn.edu.nju.bedisdover.maptest.fragment.ScenicListFragment;
 import cn.edu.nju.bedisdover.maptest.fragment.SearchFragment;
 import me.majiajie.pagerbottomtabstrip.Controller;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private void initFragment() {
         fragmentList = new ArrayList<>();
 
-        fragmentList.add(0, new ScenicListFragment());
+        fragmentList.add(0, new NavigatorFragment());
         fragmentList.add(1, new MapFragment());
         fragmentList.add(2, new ScenicListFragment());
         fragmentList.add(3, new SearchFragment());

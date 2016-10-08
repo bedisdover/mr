@@ -29,8 +29,6 @@ dependencies {
     //    androidTestCompile('com.android.support.fragment_search.espresso:espresso-core:2.2.2', {
     //        exclude group: 'com.android.support', module: 'support-annotations'
     //    })
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'me.majiajie:pager-bottom-tab-strip:1.0.0'
     testCompile 'junit:junit:4.12'
     compile files('libs/AMap_3DMap_V4.0.1_20160923.jar')
     compile files('libs/AMap_Location_V2.4.1_20160414.jar')
@@ -40,4 +38,7 @@ dependencies {
     compile files('libs/Amap_2DMap_V2.9.1_20160825.jar')
     compile files('libs/Msc.jar')
     compile files('libs/Sunflower.jar')
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'me.majiajie:pager-bottom-tab-strip:1.0.0'
+    compile 'com.android.support:support-v4:24.2.1'
 }

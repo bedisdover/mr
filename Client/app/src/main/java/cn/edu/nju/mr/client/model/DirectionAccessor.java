@@ -16,7 +16,7 @@ public class DirectionAccessor {
     }
 
     public void registerListener(SensorEventListener listener) {
-        mSensorManager.registerListener(listener, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(listener, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
     }
 
     public void unregisterListener(SensorEventListener listener) {
