@@ -44,12 +44,11 @@ public class MarkerUtil {
     public static MarkerOptions getMarkerByName(View view, String name) {
         Scenic scenic = ScenicUtil.getScenicByName(name);
 
+
         MarkerOptions markerOptions = getMarkerOptions(scenic);
         markerOptions.anchor(0.5f,0.5f).icon(
                 BitmapDescriptorFactory.fromBitmap(BitmapFactory
                         .decodeResource(view.getResources(), R.drawable.scenic_location)));
-        //设置Marker在屏幕上,不跟随地图移动
-//        screenMarker.setPositionByPixels(screenPosition.x,screenPosition.y);
 
         return markerOptions;
     }
@@ -59,11 +58,10 @@ public class MarkerUtil {
         LatLng location = new LatLng(scenic.getLatitude(), scenic.getLongitude());
 
         markerOption.position(location);
-        markerOption.title(scenic.getName()).snippet(scenic.getDescription());
+        markerOption.title(scenic.getName());
+        markerOption.infoWindowEnable(true);
         // 不能拖拽
         markerOption.draggable(false);
-        // 将Marker设置为贴地显示，可以双指下拉看效果
-//        markerOption.setFlat(true);
 
         return markerOption;
     }

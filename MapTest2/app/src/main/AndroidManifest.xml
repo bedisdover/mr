@@ -30,22 +30,21 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".ScenicActivity" />
+        <activity android:name=".ScenicDemoActivity" />
+        <activity android:name=".activity.LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".ScenicActivity" />
-        <activity android:name=".ScenicDemoActivity" />
-        <activity android:name=".activity.LoadActivity">
 
         </activity>
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="key">bce1118d67a78960cc36e51868e3878f
+            android:value="key">f0b52c9fd458378bf498e02e290c497f
         </meta-data>
     </application>
 

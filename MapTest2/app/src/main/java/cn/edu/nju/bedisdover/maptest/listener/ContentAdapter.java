@@ -73,6 +73,10 @@ public class ContentAdapter extends BaseAdapter {
 
         final String name = (String) map.get("name");
 
+        if (holder == null) {
+            return convertView;
+        }
+
         holder.icon.setBackgroundResource((Integer) map.get("icon"));
         holder.name.setText(name);
         holder.go.setBackgroundResource((Integer) map.get("go"));

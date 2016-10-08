@@ -23,7 +23,7 @@ public class CameraAccessor {
     }
 
     public void startCamera() throws IOException, NoAvailableCameraException {
-
+        if (mTargetView == null) return;
         final SurfaceHolder sf = mTargetView.getHolder();
         sf.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         sf.setFixedSize(480, 800);
@@ -64,8 +64,10 @@ public class CameraAccessor {
     }
 
     public void stopCamera() {
-        camera.stopPreview();
-        camera.release();
+        if (camera != null) {
+            camera.stopPreview();
+            camera.release();
+        }
     }
 
     private SurfaceView mTargetView;

@@ -19,6 +19,7 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
 import com.amap.api.maps.model.animation.TranslateAnimation;
@@ -79,8 +80,12 @@ public class MapFragment extends Fragment {
             ArrayList<Marker> markerList = map.addMarkers(MarkerUtil.getMarkerList(mapView), false);
             startGrowAnimation(markerList);
         } else {
-            Marker marker = map.addMarker(MarkerUtil.getMarkerByName(mapView, scenicName));
-//            startJumpAnimation(marker);
+            MarkerOptions markerOptions = MarkerUtil.getMarkerByName(mapView, scenicName);
+
+            map.addMarker(markerOptions);
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                    markerOptions.getPosition(), 12, 0, 0)));
+            markerOptions.infoWindowEnable(true);
         }
 
         map.setOnMarkerClickListener(new MarkListener(mapView));

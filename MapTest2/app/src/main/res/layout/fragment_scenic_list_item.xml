@@ -14,12 +14,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/signore"
-        android:minHeight="50dp"/>
+        />
 
     <TextView
         android:id="@+id/list_scenic_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:gravity="center_vertical"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/list_scenic_icon"

@@ -1,5 +1,7 @@
 package cn.edu.nju.bedisdover.maptest.model;
 
+import java.util.Random;
+
 import cn.edu.nju.bedisdover.maptest.model.SightSpot;
 import cn.edu.nju.bedisdover.maptest.vo.ScreenLocation;
 
@@ -59,7 +61,7 @@ public class Scenic {
         if (Math.abs(absoluteAngel - direction) > 30) {
             return null;
         }
-        float ay = 0.5f;
+        float ay = (float) (0.3f + this.longitude / 500.f);
         float ax = ((float) absoluteAngel - direction) / 30 * 0.5f + 0.5f;
         return new ScreenLocation(ax, ay);
     }

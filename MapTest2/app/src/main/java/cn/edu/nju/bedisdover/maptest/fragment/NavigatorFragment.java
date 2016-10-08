@@ -1,6 +1,7 @@
 package cn.edu.nju.bedisdover.maptest.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,11 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.nju.bedisdover.maptest.MainActivity;
 import cn.edu.nju.bedisdover.maptest.R;
-import cn.edu.nju.bedisdover.maptest.activity.SceneItem;
+import cn.edu.nju.bedisdover.maptest.ScenicActivity;
 import cn.edu.nju.bedisdover.maptest.model.CameraAccessor;
 import cn.edu.nju.bedisdover.maptest.model.DirectionAccessor;
 import cn.edu.nju.bedisdover.maptest.model.LocationAccessor;
@@ -65,10 +67,19 @@ public class NavigatorFragment extends Fragment implements LocationListener, Sen
         initComponents();
 
 
-        scenicList = ScenicUtil.getScenicList(new View(getActivity()));
-        scenicList.add(new Scenic("1", 10, 29, ""));
-        scenicList.add(new Scenic("2", 100, 29, ""));
-        scenicList.add(new Scenic("3", 50, 179, ""));
+        scenicList = new ArrayList<>();
+        scenicList.add(new Scenic("白鹿洞书院", 10, 29, ""));
+        scenicList.add(new Scenic("庐山会议旧址", 100, 129, ""));
+        scenicList.add(new Scenic("五老峰", 50, 179, ""));
+
+        scenicList.add(new Scenic("三叠泉", 140, 43, ""));
+        scenicList.add(new Scenic("如琴湖", 53, 2, ""));
+
+        scenicList.add(new Scenic("芦林湖", 234, 23, ""));
+        scenicList.add(new Scenic("龙首崖", 45, 35, ""));
+
+        scenicList.add(new Scenic("黄龙潭", 234, 55, ""));
+        scenicList.add(new Scenic("美庐别墅", 234, 65, ""));
 
 
 
@@ -158,8 +169,18 @@ public class NavigatorFragment extends Fragment implements LocationListener, Sen
         }
     }
 
-    public void addNewButton(Scenic scenic, double longitude, double latitude, int direction) {
-        SceneItem b = new SceneItem(getActivity(), "123123", 1561);
+    public void addNewButton(final Scenic scenic, double longitude, double latitude, int direction) {
+        Button b = new Button(getActivity());
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ScenicActivity.class);
+                intent.putExtra("name", scenic.getName());
+                getActivity().startActivity(intent);
+            }
+        });
+        b.setText(scenic.getName() + "\n"+ (int) scenic.getLatitude() +"km");
+        b.setBackgroundResource(R.color.greeeeen);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -188,7 +209,6 @@ public class NavigatorFragment extends Fragment implements LocationListener, Sen
     }
 
     private void initComponents() {
-        surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         mainPane = (RelativeLayout) findViewById(R.id.mainPane);
     }
 

@@ -15,7 +15,6 @@ import java.util.List;
 import cn.edu.nju.bedisdover.maptest.fragment.MapFragment;
 import cn.edu.nju.bedisdover.maptest.fragment.NavigatorFragment;
 import cn.edu.nju.bedisdover.maptest.fragment.ScenicListFragment;
-import cn.edu.nju.bedisdover.maptest.fragment.SearchFragment;
 import cn.edu.nju.bedisdover.maptest.listener.MapLocationListener;
 import me.majiajie.pagerbottomtabstrip.Controller;
 import me.majiajie.pagerbottomtabstrip.PagerBottomTabLayout;
@@ -81,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
         //用TabItemBuilder构建一个导航按钮
         TabItemBuilder tabItemBuilder = new TabItemBuilder(this).create()
-                .setDefaultIcon(android.R.drawable.ic_menu_view)
-                .setText("探索")
+                .setDefaultIcon(android.R.drawable.ic_menu_search)
+                .setText("景点")
                 .setSelectedColor(color)
                 .build();
 
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         controller = pagerBottomTabLayout.builder()
                 .addTabItem(tabItemBuilder)
                 .addTabItem(android.R.drawable.ic_menu_compass, "位置", color)
-                .addTabItem(android.R.drawable.ic_menu_search, "搜索", color)
+                .addTabItem(android.R.drawable.ic_menu_view, "探索", color)
                 .setMode(TabLayoutMode.HIDE_TEXT | TabLayoutMode.CHANGE_BACKGROUND_COLOR)
                 .build();
 
