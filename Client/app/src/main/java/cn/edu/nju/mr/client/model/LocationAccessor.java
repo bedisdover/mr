@@ -24,10 +24,10 @@ public class LocationAccessor {
 
     public void setLocationListener(LocationListener listener) throws NoLocationPermissionException {
         this.mLocationListener = listener;
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            throw new NoLocationPermissionException();
-        }
+//        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            throw new NoLocationPermissionException();
+//        }
         mLocationManager.requestLocationUpdates(mPreferredProvider, 0, 0, mLocationListener);
     }
 
@@ -59,11 +59,11 @@ public class LocationAccessor {
         if (mLocationManager == null) {
             return null;
         }
+//        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return null;
+//        }
 
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            throw new NoLocationAccessException();
-        }
         return mLocationManager.getLastKnownLocation(mPreferredProvider);
     }
 
