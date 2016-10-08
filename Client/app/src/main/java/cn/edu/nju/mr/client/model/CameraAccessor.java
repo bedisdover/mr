@@ -1,9 +1,14 @@
 package cn.edu.nju.mr.client.model;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+import android.view.Display;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
+import cn.edu.nju.mr.client.R;
 
 import java.io.IOException;
 
@@ -17,23 +22,51 @@ public class CameraAccessor {
         this.mTargetView = target;
     }
 
-    public void startCamera() throws IOException {
-        if(Camera.getNumberOfCameras() >= 2){
-            camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
-        }else{
-            camera = Camera.open(0);
-        }
+    public void startCamera() throws IOException, NoAvailableCameraException {
 
-        Parameters parameters = camera.getParameters();
-        parameters.setPreviewFpsRange(5, 10);
-        camera.setParameters(parameters);
-        camera.setPreviewDisplay(mTargetView.getHolder());
-        camera.startPreview();
+        final SurfaceHolder sf = mTargetView.getHolder();
+        sf.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        sf.setFixedSize(480, 800);
+        sf.addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder surfaceHolder) {
+
+                if (Camera.getNumberOfCameras() <= 0)
+                    return;
+                camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+                Parameters parameters = camera.getParameters();
+                parameters.setPreviewFpsRange(5, 10);
+                camera.setParameters(parameters);
+                camera.startPreview();
+                try {
+                    camera.setPreviewDisplay(sf);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                camera.startPreview();
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+                if (camera != null) {
+                    camera.stopPreview();
+                    camera.release();
+                }
+            }
+        });
     }
 
     public void stopCamera() {
-        camera.stopPreview();
-        camera.release();
+        if (camera != null) {
+            camera.stopPreview();
+            camera.release();
+        }
     }
 
     private SurfaceView mTargetView;

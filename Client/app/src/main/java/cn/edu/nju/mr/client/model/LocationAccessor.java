@@ -31,6 +31,14 @@ public class LocationAccessor {
         mLocationManager.requestLocationUpdates(mPreferredProvider, 0, 0, mLocationListener);
     }
 
+    public void stopListen() {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        this.mLocationManager.removeUpdates(this.mLocationListener);
+    }
+
     public LocationManager getLocationManager() {
         return mLocationManager;
     }
@@ -55,6 +63,7 @@ public class LocationAccessor {
 //                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 //            return null;
 //        }
+
         return mLocationManager.getLastKnownLocation(mPreferredProvider);
     }
 
