@@ -15,6 +15,12 @@
     <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -22,6 +28,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <service android:name="com.amap.api.location.APSService" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +39,13 @@
         </activity>
         <activity android:name=".ScenicActivity" />
         <activity android:name=".ScenicDemoActivity" />
+        <activity android:name=".activity.LoadActivity">
+
+        </activity>
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="key">
-            ac0927277abf8e8c8b27cdc8017c382c
+            android:value="key">bce1118d67a78960cc36e51868e3878f
         </meta-data>
     </application>
 

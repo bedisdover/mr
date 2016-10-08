@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,7 @@ import cn.edu.nju.bedisdover.maptest.fragment.MapFragment;
 import cn.edu.nju.bedisdover.maptest.fragment.NavigatorFragment;
 import cn.edu.nju.bedisdover.maptest.fragment.ScenicListFragment;
 import cn.edu.nju.bedisdover.maptest.fragment.SearchFragment;
+import cn.edu.nju.bedisdover.maptest.listener.MapLocationListener;
 import me.majiajie.pagerbottomtabstrip.Controller;
 import me.majiajie.pagerbottomtabstrip.PagerBottomTabLayout;
 import me.majiajie.pagerbottomtabstrip.TabItemBuilder;
@@ -28,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Controller controller;
 
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+    //声明AMapLocationClientOption对象
+    public AMapLocationClientOption mLocationOption = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +44,34 @@ public class MainActivity extends AppCompatActivity {
 
         initBottomBar();
         initFragment();
+
+//        initMap();
+    }
+
+    /**
+     * 初始化定位
+     */
+    private void initMap() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(new MapLocationListener());
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+        mLocationOption.setInterval(1000);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //设置是否强制刷新WIFI，默认为true，强制刷新。
+        mLocationOption.setWifiActiveScan(false);
+        //设置是否允许模拟位置,默认为false，不允许模拟位置
+        mLocationOption.setMockEnable(false);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
     }
 
     private void initBottomBar() {
@@ -54,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
                 .addTabItem(tabItemBuilder)
                 .addTabItem(android.R.drawable.ic_menu_compass, "位置", color)
                 .addTabItem(android.R.drawable.ic_menu_search, "搜索", color)
-                .addTabItem(android.R.drawable.ic_menu_help, "帮助", color)
                 .setMode(TabLayoutMode.HIDE_TEXT | TabLayoutMode.CHANGE_BACKGROUND_COLOR)
                 .build();
 
@@ -64,10 +100,9 @@ public class MainActivity extends AppCompatActivity {
     private void initFragment() {
         fragmentList = new ArrayList<>();
 
-        fragmentList.add(0, new NavigatorFragment());
+        fragmentList.add(0, new ScenicListFragment());
         fragmentList.add(1, new MapFragment());
-        fragmentList.add(2, new ScenicListFragment());
-        fragmentList.add(3, new SearchFragment());
+        fragmentList.add(2, new NavigatorFragment());
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.activity_main_content, fragmentList.get(0));
@@ -100,8 +135,7 @@ public class MainActivity extends AppCompatActivity {
      * 跳转到指定景点的地图位置
      */
     public void jumpToScenic(String scenicName) {
-        Intent intent = getIntent();
-        intent.putExtra("scenicName", scenicName);
+        MapFragment.setScenicName(scenicName);
 
         // 切换导航栏
         controller.setSelect(1);

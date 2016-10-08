@@ -27,8 +27,6 @@ public class ScenicListItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_scenic_list_item, container, false);
 
         final TextView scenicName = (TextView) view.findViewById(R.id.list_scenic_name);

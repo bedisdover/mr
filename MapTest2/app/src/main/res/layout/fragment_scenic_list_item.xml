@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/signore" />
+        android:contentDescription="@string/signore"
+        android:minHeight="50dp"/>
 
     <TextView
         android:id="@+id/list_scenic_name"

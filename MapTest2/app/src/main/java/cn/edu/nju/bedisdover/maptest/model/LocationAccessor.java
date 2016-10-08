@@ -1,4 +1,4 @@
-package cn.edu.nju.mr.client.model;
+package cn.edu.nju.bedisdover.maptest.model;
 
 import android.Manifest;
 import android.content.Context;
@@ -15,7 +15,10 @@ import java.util.List;
  * Created by alpaca on 16-10-4.
  */
 public class LocationAccessor {
+    public void stopListen() {
 
+        this.mLocationManager.removeUpdates(this.mLocationListener);
+    }
     public LocationAccessor(Context context) throws NoLocationAccessException {
         this.mContext = context;
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -29,11 +32,6 @@ public class LocationAccessor {
 //            throw new NoLocationPermissionException();
 //        }
         mLocationManager.requestLocationUpdates(mPreferredProvider, 0, 0, mLocationListener);
-    }
-
-    public void stopListen() {
-
-        this.mLocationManager.removeUpdates(this.mLocationListener);
     }
 
     public LocationManager getLocationManager() {
@@ -60,7 +58,6 @@ public class LocationAccessor {
 //                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 //            return null;
 //        }
-
         return mLocationManager.getLastKnownLocation(mPreferredProvider);
     }
 

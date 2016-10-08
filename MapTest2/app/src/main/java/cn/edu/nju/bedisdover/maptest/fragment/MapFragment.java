@@ -1,14 +1,16 @@
 package cn.edu.nju.bedisdover.maptest.fragment;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -16,6 +18,13 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.animation.Animation;
+import com.amap.api.maps.model.animation.ScaleAnimation;
+import com.amap.api.maps.model.animation.TranslateAnimation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.edu.nju.bedisdover.maptest.R;
 import cn.edu.nju.bedisdover.maptest.listener.MarkListener;
@@ -31,7 +40,9 @@ public class MapFragment extends Fragment {
     /**
      * 特定的景点名称
      */
-    private String scenicName;
+    private static String scenicName = "";
+
+    private AMap map;
 
     @Nullable
     @Override
@@ -47,22 +58,14 @@ public class MapFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onPause() {
+        super.onPause();
 
-        super.onAttach(context);
-        Intent intent = ((Activity) context).getIntent();
-        String name = intent.getStringExtra("scenicName");
-
-        if (name != null) {
-            scenicName = name;
-        } else {
-            scenicName = "";
-        }
-
+        scenicName = "";
     }
 
     private void initMap(MapView mapView) {
-        AMap map = mapView.getMap();
+        map = mapView.getMap();
         UiSettings uiSettings = map.getUiSettings();
 
         map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
@@ -73,9 +76,11 @@ public class MapFragment extends Fragment {
         )));
 
         if (scenicName.equals("")) {
-            map.addMarkers(MarkerUtil.getMarkerList(mapView), false);
+            ArrayList<Marker> markerList = map.addMarkers(MarkerUtil.getMarkerList(mapView), false);
+            startGrowAnimation(markerList);
         } else {
-            map.addMarker(MarkerUtil.getMarkerByName(mapView, scenicName));
+            Marker marker = map.addMarker(MarkerUtil.getMarkerByName(mapView, scenicName));
+//            startJumpAnimation(marker);
         }
 
         map.setOnMarkerClickListener(new MarkListener(mapView));
@@ -85,5 +90,68 @@ public class MapFragment extends Fragment {
 //        uiSettings.setMyLocationButtonEnabled(true); // 显示默认的定位按钮
         map.setMyLocationEnabled(true);// 可触发定位并显示定位层
         uiSettings.setScaleControlsEnabled(false);//显示比例尺控件
+    }
+
+    public static void setScenicName(String scenicName) {
+        MapFragment.scenicName = scenicName;
+    }
+
+    /**
+     * 地上生长的Marker
+     */
+    private void startGrowAnimation(List<Marker> markerList) {
+        if (markerList != null) {
+            Animation animation = new ScaleAnimation(0, 1, 0, 1);
+            animation.setInterpolator(new LinearInterpolator());
+            //整个移动所需要的时间
+            animation.setDuration(1500);
+
+            for (Marker growMarker : markerList) {
+                //设置动画
+                growMarker.setAnimation(animation);
+                //开始动画
+                growMarker.startAnimation();
+            }
+        }
+    }
+
+    /**
+     * 屏幕中心marker 跳动
+     */
+    public void startJumpAnimation(Marker marker) {
+        if (marker != null) {
+            //根据屏幕距离计算需要移动的目标点
+            final LatLng latLng = marker.getPosition();
+            Point point = map.getProjection().toScreenLocation(latLng);
+            point.y -= dip2px(getActivity(), 125);
+            LatLng target = map.getProjection().fromScreenLocation(point);
+            //使用TranslateAnimation,填写一个需要移动的目标点
+            Animation animation = new TranslateAnimation(target);
+            animation.setInterpolator(new Interpolator() {
+                @Override
+                public float getInterpolation(float input) {
+                    // 模拟重加速度的interpolator
+                    if (input <= 0.5) {
+                        return (float) (0.5f - 2 * (0.5 - input) * (0.5 - input));
+                    } else {
+                        return (float) (0.5f - Math.sqrt((input - 0.5f) * (1.5f - input)));
+                    }
+                }
+            });
+            //整个移动所需要的时间
+            animation.setDuration(600);
+            //设置动画
+            marker.setAnimation(animation);
+            //开始动画
+            marker.startAnimation();
+        } else {
+            Log.e("ama", "marker is null");
+        }
+    }
+
+    //dip和px转换
+    private static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }
