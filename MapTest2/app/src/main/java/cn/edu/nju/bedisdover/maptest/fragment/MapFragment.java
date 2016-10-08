@@ -48,6 +48,8 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+
+        super.onAttach(context);
         Intent intent = ((Activity) context).getIntent();
         String name = intent.getStringExtra("scenicName");
 
@@ -57,7 +59,6 @@ public class MapFragment extends Fragment {
             scenicName = "";
         }
 
-        super.onAttach(context);
     }
 
     private void initMap(MapView mapView) {

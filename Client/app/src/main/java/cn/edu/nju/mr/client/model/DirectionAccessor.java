@@ -12,11 +12,16 @@ public class DirectionAccessor {
 
     public DirectionAccessor(Context context) {
         this.mContext = context;
-        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+        initDirection();
     }
 
     public void registerListener(SensorEventListener listener) {
-        mSensorManager.registerListener(listener, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(listener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_FASTEST);
+        //mSensorManager.registerListener(listener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    public SensorManager getmSensorManager() {
+        return mSensorManager;
     }
 
     public void unregisterListener(SensorEventListener listener) {

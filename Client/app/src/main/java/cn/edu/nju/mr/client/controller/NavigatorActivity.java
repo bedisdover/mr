@@ -3,6 +3,7 @@ package cn.edu.nju.mr.client.controller;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Handler;
@@ -10,15 +11,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.edu.nju.mr.client.R;
 import cn.edu.nju.mr.client.model.*;
+import cn.edu.nju.mr.client.util.ScenicUtil;
 import cn.edu.nju.mr.client.vo.ScreenLocation;
 
 import java.io.IOException;
+import java.util.List;
 
 public class NavigatorActivity extends AppCompatActivity implements LocationListener, SensorEventListener {
 
@@ -28,13 +34,22 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
         setContentView(R.layout.activity_navigator);
         initComponents();
 
+
+        scenicList = ScenicUtil.getScenicList(new View(this));
+        scenicList.add(new Scenic("1", 10, 29, ""));
+        scenicList.add(new Scenic("2", 100, 29, ""));
+        scenicList.add(new Scenic("3", 50, 179, ""));
+
+
+
         try {
-            this.locationAccessor = new LocationAccessor(this);
+            locationAccessor = new LocationAccessor(this);
         } catch (NoLocationAccessException e) {
             e.printStackTrace();
         }
-        this.directionAccessor = new DirectionAccessor(this);
-        this.cameraAccessor = new CameraAccessor(this, surfaceView);
+        directionAccessor = new DirectionAccessor(this);
+        cameraAccessor = new CameraAccessor(this, surfaceView);
+
         initServices();
     }
 
@@ -83,9 +98,12 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
     //--------------direction services--------------------
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        int dir = (int) sensorEvent.values[0];
-        txtLocation.setText(dir + "");
+        this.direction = (int) sensorEvent.values[0];
+        flushDisplay();
     }
+
+    float[] acc;
+    float[] mag;
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
@@ -95,8 +113,8 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
     //-------------------location services-------------------------
     @Override
     public void onLocationChanged(Location location) {
-        txtLocation.setText(String.format("Longitude:%f Latitude:%f", location.getLongitude(), location.getLatitude()));
-        Toast.makeText(this, location.getLongitude() + " " + location.getLatitude(), Toast.LENGTH_LONG).show();
+        this.longitude = location.getLongitude();
+        this.latitude = location.getLatitude();
     }
 
     @Override
@@ -121,14 +139,26 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
         /*do nothing*/
     }
 
-    public void addNewButton(ScreenLocation location) {
+    public void flushDisplay() {
+        mainPane.removeAllViews();
+        for (Scenic scenic: scenicList) {
+            addNewButton(scenic, longitude, latitude, direction);
+        }
+    }
+
+    public void addNewButton(Scenic scenic, double longitude, double latitude, int direction) {
         Button b = new Button(this);
-        b.setText("顾狗子");
-        b.setHeight(100);
-        b.setWidth(100);
+        b.setText(scenic.getName());
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        windowManager = getWindowManager();
+        ScreenLocation location = scenic.getDisplayLocation(longitude, latitude, direction);
+        if (location == null) return;
+        lp.leftMargin = (int) (windowManager.getDefaultDisplay().getWidth() * location.getPx());
+        lp.topMargin = (int) (windowManager.getDefaultDisplay().getHeight() * location.getPy());
+        b.setLayoutParams(lp);
         mainPane.addView(b);
-        b.setX(100);
-        b.setY(300);
     }
 
     private void startCamera() {
@@ -153,6 +183,7 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
         mainPane = (RelativeLayout) findViewById(R.id.mainPane);
     }
 
+    private WindowManager windowManager;
     private LocationAccessor locationAccessor;
     private TextView txtLocation;
     private SurfaceView surfaceView;
@@ -161,4 +192,7 @@ public class NavigatorActivity extends AppCompatActivity implements LocationList
     private Button button;
     private RelativeLayout mainPane;
     private Handler handler = new Handler();
+    private List<Scenic> scenicList;
+    private double longitude = 0, latitude = 0;
+    private int direction;
 }

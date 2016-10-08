@@ -36,6 +36,7 @@ public class CameraAccessor {
                 camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
                 Parameters parameters = camera.getParameters();
                 parameters.setPreviewFpsRange(5, 10);
+                parameters.setPreviewSize(640, 480);
                 camera.setParameters(parameters);
                 camera.startPreview();
                 try {
